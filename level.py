@@ -1,6 +1,7 @@
 import pygame
 
 from decoration import Sky, Water, Clouds
+from game_data import levels
 from particles import ParticleEffect
 from tiles import Tile, StaticTile, Crate, AnimatedTile, Coin, Palm
 from settings import tile_size, screen_width, screen_height
@@ -10,13 +11,20 @@ from enemy import Enemy
 
 
 class Level:
-    def __init__(self, level_data, surface):
+    def __init__(self, surface, current_level, create_overworld):
+
         # level setup
         self.display_surface = surface
-        # self.setup_level(level_data)
         self.world_shift = 0
         self.current_x = None
 
+        # create overworld
+        self.create_overworld = create_overworld
+        self.current_level = current_level
+        level_data = levels[self.current_level]
+        self.new_max_level = level_data['unlock']
+
+        
         # player
         player_layout = import_csv_layout(level_data['player'])
         self.player = pygame.sprite.GroupSingle()
@@ -59,9 +67,18 @@ class Level:
         level_width = len(terrain_layout[0]) * tile_size
         self.water = Water(screen_height - 20, level_width)
         self.clouds = Clouds(400, level_width, 30)
+
         # dust
         self.dust_sprite = pygame.sprite.GroupSingle()
         self.player_on_ground = False
+
+    def input(self):
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_RETURN]:
+            self.create_overworld(self.current_level, self.new_max_level)
+        if keys[pygame.K_ESCAPE]:
+            self.create_overworld(self.current_level, 0)
 
     def player_setup(self, layout):
         for row_index, row in enumerate(layout):
@@ -140,23 +157,6 @@ class Level:
             fall_dust_particle = ParticleEffect(self.player.sprite.rect.midbottom - offset, 'land')
             self.dust_sprite.add(fall_dust_particle)
 
-    def setup_level(self, layout):
-        self.tiles = pygame.sprite.Group()
-        self.player = pygame.sprite.GroupSingle()
-
-        for row_index, row in enumerate(layout):
-            for col_index, cell in enumerate(row):
-                if cell == 'X':
-                    x = col_index * tile_size
-                    y = row_index * tile_size
-                    tile = Tile((x, y), tile_size)
-                    self.tiles.add(tile)
-                if cell == 'P':
-                    x = col_index * tile_size
-                    y = row_index * tile_size
-                    player_sprite = Player((x, y), self.display_surface, self.create_jump_particles)
-                    self.player.add(player_sprite)
-
     def scroll_x(self):
         player = self.player.sprite
         player_x = player.rect.centerx
@@ -218,6 +218,14 @@ class Level:
             if pygame.sprite.spritecollide(enemy, self.constraint_sprites, False):
                 enemy.reverse()
 
+    def check_death(self):
+        if self.player.sprite.rect.top > screen_height:
+            self.create_overworld(self.current_level, 0)
+
+    def check_win(self):
+        if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
+            self.create_overworld(self.current_level, self.new_max_level)
+
     def run(self):
         # decoration
         self.sky.draw(self.display_surface)
@@ -253,9 +261,6 @@ class Level:
         self.fg_palm_sprites.update(self.world_shift)
         self.fg_palm_sprites.draw(self.display_surface)
 
-        # water
-        self.water.draw(self.display_surface, self.world_shift)
-
         self.dust_sprite.update(self.world_shift)
         self.dust_sprite.draw(self.display_surface)
 
@@ -272,25 +277,8 @@ class Level:
         self.goal.update(self.world_shift)
         self.goal.draw(self.display_surface)
 
+        self.check_death()
+        self.check_win()
 
-
-
-        """
-        # player
-        self.player.update()
-        self.horizontal_movement_collision()
-        self.get_player_on_ground()
-        self.vertical_movement_collision()
-        self.create_landing_dust()
-        self.player.draw(self.display_surface)
-
-       # dust particle
-       self.dust_sprite.update(self.world_shift)
-       self.dust_sprite.draw(self.display_surface)
-
-       # level tiles
-       self.tiles.update(self.world_shift)
-       self.tiles.draw(self.display_surface)
-       self.scroll_x()
-        """
-
+        # water
+        self.water.draw(self.display_surface, self.world_shift)
