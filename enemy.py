@@ -7,7 +7,7 @@ from tiles import AnimatedTile
 class Enemy(AnimatedTile):
     def __init__(self, size, x, y):
         super().__init__(size, x, y, 'graphics/enemy/run')
-        self.rect.y += 64 - self.image.get_size()[1]
+        self.rect.y += size - self.image.get_size()[1]
         self.speed = randint(3, 5)
 
     def move(self):

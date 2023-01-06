@@ -45,12 +45,13 @@ class Icon(pygame.sprite.Sprite):
 
 
 class Overworld:
-    def __init__(self, start_level, max_level, surface, create_level):
+    def __init__(self, start_level, max_level, surface, create_level, create_menu):
         # setup
         self.display_surface = surface
         self.max_level = max_level
         self.current_level = start_level
         self.create_level = create_level
+        self.create_menu = create_menu
 
         # movement logic
         self.moving = False
@@ -61,6 +62,11 @@ class Overworld:
         self.setup_nodes()
         self.setup_icon()
         self.sky = Sky(8, 'overworld')
+
+        # time
+        self.start_time = pygame.time.get_ticks()
+        self.allow_input = False
+        self.timer_length = 1000
 
     def setup_nodes(self):
         self.nodes = pygame.sprite.Group()
@@ -84,8 +90,9 @@ class Overworld:
     def input(self):
         keys = pygame.key.get_pressed()
 
-        if not self.moving:
+        if not self.moving and self.allow_input:
             if keys[pygame.K_RIGHT] and self.current_level < self.max_level:
+                print(self.current_level, self.max_level)
                 self.move_direction = self.get_movement_data('next')
                 self.current_level += 1
                 self.moving = True
@@ -95,6 +102,8 @@ class Overworld:
                 self.moving = True
             elif keys[pygame.K_SPACE]:
                 self.create_level(self.current_level)
+            elif keys[pygame.K_ESCAPE]:
+                self.create_menu(self.display_surface, self.current_level)
 
     def get_movement_data(self, target):
         start = pygame.math.Vector2(self.nodes.sprites()[self.current_level].rect.center)
@@ -114,7 +123,14 @@ class Overworld:
                 self.moving = False
                 self.move_direction = pygame.math.Vector2(0, 0)
 
+    def input_timer(self):
+        if not self.allow_input:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.start_time >= self.timer_length:
+                self.allow_input = True
+
     def run(self):
+        self.input_timer()
         self.input()
         self.update_icon_pos()
         self.icon.update()
@@ -124,4 +140,3 @@ class Overworld:
         self.draw_paths()
         self.nodes.draw(self.display_surface)
         self.icon.draw(self.display_surface)
-
