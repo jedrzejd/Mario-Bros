@@ -1,6 +1,7 @@
 from random import randint
 
 import pygame
+
 from tiles import AnimatedTile
 
 

@@ -16,7 +16,8 @@ class Node(pygame.sprite.Sprite):
         else:
             self.status = 'locked'
         self.rect = self.image.get_rect(center=pos)
-        self.detection_zone = pygame.Rect(self.rect.centerx - (icon_speed / 2), self.rect.centery - (icon_speed / 2), icon_speed, icon_speed)
+        self.detection_zone = pygame.Rect(self.rect.centerx - (icon_speed / 2), self.rect.centery - (icon_speed / 2),
+                                          icon_speed, icon_speed)
 
     def animate(self):
         self.frame_index += 0.15
@@ -37,7 +38,7 @@ class Icon(pygame.sprite.Sprite):
     def __init__(self, pos):
         super().__init__()
         self.pos = pos
-        self.image = pygame.image.load('graphics/character/idle/1.png').convert_alpha()
+        self.image = pygame.image.load('graphics/character/idle/idle1.png').convert_alpha()
         self.rect = self.image.get_rect(center=pos)
 
     def update(self):
@@ -92,7 +93,6 @@ class Overworld:
 
         if not self.moving and self.allow_input:
             if keys[pygame.K_RIGHT] and self.current_level < self.max_level:
-                print(self.current_level, self.max_level)
                 self.move_direction = self.get_movement_data('next')
                 self.current_level += 1
                 self.moving = True

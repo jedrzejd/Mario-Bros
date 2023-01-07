@@ -1,6 +1,8 @@
-import pygame
 import sys
 
+import pygame
+
+from end_screen import End_Screen
 from level import Level
 from menu import Menu
 from overworld import Overworld
@@ -11,27 +13,30 @@ from ui import UI
 class Game:
     def __init__(self):
         # game attributes
-        self.max_level = 0
+        self.max_level = 2
         self.max_health = 100
         self.curr_health = 100
         self.coins = 0
+        self.enemy_kills = 0
+        self.score = 0
 
         # audio
         self.level_bg_music = pygame.mixer.Sound('audio/level_music.wav')
         self.overworld_bg_music = pygame.mixer.Sound('audio/overworld_music.wav')
-        self.menu_music = pygame.mixer.Sound('resources_music_main_theme.ogg')
+        self.menu_music = pygame.mixer.Sound('audio/music_main_theme.ogg')
+        self.end_game_music = pygame.mixer.Sound('audio/win.mp3')
 
         # overworld creation
-        # self.overworld = Overworld(0, self.max_level, screen, self.create_level)
         self.menu = Menu(screen, self.create_overworld, 0)
         self.menu_music.play(loops=-1)
         self.status = 'menu'
 
         # user interface
-        self.ui = UI(screen)
+        self.ui = UI(screen, 'game')
 
     def create_level(self, current_level):
-        self.level = Level(screen, current_level, self.create_overworld, self.change_coins, self.change_health)
+        self.level = Level(screen, current_level, self.create_overworld, self.change_coins, self.change_health,
+                           self.change_enemy_kills, self.create_end_screen, self.change_score)
         self.status = 'level'
         self.overworld_bg_music.stop()
         self.level_bg_music.play(loops=-1)
@@ -51,17 +56,30 @@ class Game:
         self.overworld_bg_music.stop()
         self.menu_music.play(loops=-1)
 
+    def create_end_screen(self):
+        self.status = 'end_game'
+        self.level_bg_music.stop()
+        self.end_game_music.play()
+        self.end_screen = End_Screen(screen)
+
     def change_coins(self, amount):
         self.coins += amount
 
     def change_health(self, amount):
         self.curr_health += amount
 
+    def change_enemy_kills(self, amount):
+        self.enemy_kills += amount
+
+    def change_score(self, amount):
+        self.score += amount
+
     def check_game_over(self):
         if self.curr_health <= 0:
             self.curr_health = 100
             self.coins = 0
             self.max_level = 0
+            self.enemy_kills = 0
             self.overworld = Overworld(0, self.max_level, screen, self.create_level, self.create_menu)
             self.status = 'overworld'
             self.level_bg_music.stop()
@@ -72,10 +90,20 @@ class Game:
             self.menu.run()
         elif self.status == 'overworld':
             self.overworld.run()
+        elif self.status == 'end_game':
+            self.end_screen.run()
+            self.ui.change_status('end_game')
+            self.ui.show_score(self.score)
+            self.ui.show_health(self.curr_health, self.max_health)
+            self.ui.show_coins(self.coins)
+            self.ui.show_enemy_kills(self.enemy_kills)
+
         else:
             self.level.run()
             self.ui.show_health(self.curr_health, self.max_health)
             self.ui.show_coins(self.coins)
+            self.ui.show_enemy_kills(self.enemy_kills)
+            self.ui.show_score(self.score)
             self.check_game_over()
 
 

@@ -1,31 +1,31 @@
 import pygame
 
 from decoration import Sky, Water, Clouds
+from enemy import Enemy
 from game_data import levels
 from particles import ParticleEffect
-from tiles import Tile, StaticTile, Crate, AnimatedTile, Coin, Palm
-from settings import tile_size, screen_width, screen_height
 from player import Player
+from settings import tile_size, screen_width, screen_height
+from tiles import Tile, StaticTile, Crate, Coin, Palm
 from utilities import import_csv_layout, import_cut_graphics
-from enemy import Enemy
 
 
 class Level:
-    def __init__(self, surface, current_level, create_overworld, change_coins, change_health):
+    def __init__(self, surface, current_level, create_overworld, change_coins, change_health, change_enemy_kills,
+                 create_end_screen, change_score):
 
         # level setup
         self.display_surface = surface
         self.world_shift = 0
 
         # audio
-        # self.coin_sound = pygame.mixer.Sound('audio/effects/coin.wav')
-        self.coin_sound = pygame.mixer.Sound('resources_sound_coin.ogg')
-        # self.stomp_sound = pygame.mixer.Sound('audio/effects/stomp.wav')
-        self.stomp_sound = pygame.mixer.Sound('resources_sound_stomp.ogg')
+        self.coin_sound = pygame.mixer.Sound('audio/effects/sound_coin.ogg')
+        self.stomp_sound = pygame.mixer.Sound('audio/effects/sound_stomp.ogg')
 
         # create overworld
         self.create_overworld = create_overworld
         self.current_level = current_level
+        self.create_end_screen = create_end_screen
         level_data = levels[self.current_level]
         self.new_max_level = level_data['unlock']
 
@@ -36,7 +36,10 @@ class Level:
         self.player_setup(player_layout, change_health)
 
         # user interface
+        self.change_health = change_health
         self.change_coins = change_coins
+        self.change_enemy_kills = change_enemy_kills
+        self.change_score = change_score
 
         # dust
         self.dust_sprite = pygame.sprite.GroupSingle()
@@ -91,7 +94,7 @@ class Level:
                     sprite = Player((x, y), self.display_surface, self.create_jump_particles, change_health)
                     self.player.add(sprite)
                 if val == '1':
-                    hat_surface = pygame.image.load('graphics/character/hat.png').convert_alpha()
+                    hat_surface = pygame.image.load('graphics/character/star.png').convert_alpha()
                     sprite = StaticTile(tile_size, x, y, hat_surface)
                     self.goal.add(sprite)
 
@@ -226,17 +229,23 @@ class Level:
 
     def check_death(self):
         if self.player.sprite.rect.top > screen_height:
-            self.create_overworld(self.current_level, 0)
+            self.player.sprite.direction.y = -20
+            self.change_health(-30)
 
     def check_win(self):
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
-            self.create_overworld(self.current_level, self.new_max_level)
+            self.change_score(1000)
+            if self.current_level == 2:
+                self.create_end_screen()
+            else:
+                self.create_overworld(self.current_level, self.new_max_level)
 
     def check_coin_collisions(self):
         collided_coins = pygame.sprite.spritecollide(self.player.sprite, self.coins_sprites, True)
         if collided_coins:
             self.coin_sound.play()
             for coin in collided_coins:
+                self.change_score(coin.value * 100)
                 self.change_coins(coin.value)
 
     def check_enemy_collisions(self):
@@ -248,6 +257,8 @@ class Level:
                 player_bottom = self.player.sprite.rect.bottom
                 if enemy_top < player_bottom < enemy_center and self.player.sprite.direction.y >= 0:
                     self.stomp_sound.play()
+                    self.change_score(abs(enemy.speed) * 50)
+                    self.change_enemy_kills(1)
                     self.player.sprite.direction.y = -15
                     explosion_sprite = ParticleEffect(enemy.rect.center, 'explosion')
                     self.explosion_sprites.add(explosion_sprite)

@@ -27,46 +27,77 @@ level_00 = {
 
 }
 
-menu_level_0 = {
-    'node_pos': (110, 400),
-    'content': 'this is level 0',
-    'unlock': 1
-}
-menu_level_1 = {
-    'node_pos': (300, 220),
-    'content': 'this is level 1',
+level_1 = {
+    'terrain': 'levels/1/level_1_terrain.csv',
+    'coins': 'levels/1/level_1_coins.csv',
+    'fg palms': 'levels/1/level_1_fg_palms.csv',
+    'bg palms': 'levels/1/level_1_bg_palms.csv',
+    'crates': 'levels/1/level_1_crates.csv',
+    'enemies': 'levels/1/level_1_enemies.csv',
+    'constraints': 'levels/1/level_1_constraints.csv',
+    'player': 'levels/1/level_1_player.csv',
+    'grass': 'levels/1/level_1_grass.csv',
+    'node_pos': (550, 150),
     'node_graphics': 'graphics/overworld/1',
     'unlock': 2
 }
-menu_level_2 = {
-    'node_pos': (480, 610),
-    'content': 'this is level 2',
+
+level_2 = {
+    'terrain': 'levels/2/level_2_terrain.csv',
+    'coins': 'levels/2/level_2_coins.csv',
+    'fg palms': 'levels/2/level_2_fg_palms.csv',
+    'bg palms': 'levels/2/level_2_bg_palms.csv',
+    'crates': 'levels/2/level_2_crates.csv',
+    'enemies': 'levels/2/level_2_enemies.csv',
+    'constraints': 'levels/2/level_2_constraints.csv',
+    'player': 'levels/2/level_2_player.csv',
+    'grass': 'levels/2/level_2_grass.csv',
+    'node_pos': (880, 600),
     'node_graphics': 'graphics/overworld/2',
     'unlock': 3
 }
-menu_level_3 = {
-    'node_pos': (610, 350),
-    'content': 'this is level 3',
-    'node_graphics': 'graphics/overworld/3',
-    'unlock': 4
-}
-menu_level_4 = {
-    'node_pos': (880, 210),
-    'content': 'this is level 4',
-    'node_graphics': 'graphics/overworld/4',
-    'unlock': 5
-}
-menu_level_5 = {
-    'node_pos': (1050, 400),
-    'content': 'this is level 5',
-    'node_graphics': 'graphics/overworld/5',
-    'unlock': 5
-}
+
+# menu_level_0 = {
+#     'node_pos': (110, 400),
+#     'content': 'this is level 0',
+#     'unlock': 1
+# }
+# menu_level_1 = {
+#     'node_pos': (300, 220),
+#     'content': 'this is level 1',
+#     'node_graphics': 'graphics/overworld/1',
+#     'unlock': 2
+# }
+# menu_level_2 = {
+#     'node_pos': (480, 610),
+#     'content': 'this is level 2',
+#     'node_graphics': 'graphics/overworld/2',
+#     'unlock': 3
+# }
+# menu_level_3 = {
+#     'node_pos': (610, 350),
+#     'content': 'this is level 3',
+#     'node_graphics': 'graphics/overworld/3',
+#     'unlock': 4
+# }
+# menu_level_4 = {
+#     'node_pos': (880, 210),
+#     'content': 'this is level 4',
+#     'node_graphics': 'graphics/overworld/4',
+#     'unlock': 5
+# }
+# menu_level_5 = {
+#     'node_pos': (1050, 400),
+#     'content': 'this is level 5',
+#     'node_graphics': 'graphics/overworld/5',
+#     'unlock': 5
+# }
 
 levels = {
-	0: level_00,
-	1: menu_level_1,
-	2: menu_level_2,
-	3: menu_level_3,
-	4: menu_level_4,
-	5: menu_level_5}
+    0: level_00,
+    1: level_1,
+    2: level_2
+    # 3: menu_level_3,
+    # 4: menu_level_4,
+    # 5: menu_level_5
+}

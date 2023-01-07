@@ -1,5 +1,7 @@
-import pygame
 import sys
+
+import pygame
+
 from button import Button
 
 
@@ -30,33 +32,6 @@ class Menu:
 
     def play(self):
         self.create_overworld(self.current_level, 0)
-        # while True:
-        #     PLAY_MOUSE_POS = pygame.mouse.get_pos()
-        #
-        #     self.display_surface.fill("black")
-        #
-        #     PLAY_TEXT = self.get_font(45).render("This is the PLAY surface.", True, "White")
-        #     PLAY_RECT = PLAY_TEXT.get_rect(center=(640, 260))
-        #     self.display_surface.blit(PLAY_TEXT, PLAY_RECT)
-        #
-        #     PLAY_BACK = Button(image=None, pos=(640, 460),
-        #                         text_input="BACK", font=self.get_font(75), base_color="White", hovering_color="Green")
-        #
-        #     PLAY_BACK.changeColor(PLAY_MOUSE_POS)
-        #     PLAY_BACK.update(self.display_surface)
-        #
-        #     for event in pygame.event.get():
-        #         if event.type == pygame.QUIT:
-        #             pygame.quit()
-        #             sys.exit()
-        #         if event.type == pygame.MOUSEBUTTONDOWN:
-        #             if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
-        #                 self.main_menu()
-        #         if event.type == pygame.KEYDOWN:
-        #             if event.key == pygame.K_ESCAPE:
-        #                 self.main_menu()
-        #
-        #     pygame.display.update()
 
     def check_menu_option(self):
         menu_mouse_pos = pygame.mouse.get_pos()
@@ -80,9 +55,6 @@ class Menu:
                 pygame.quit()
                 sys.exit()
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.play_button.checkForInput(menu_mouse_pos):
                         self.play()
@@ -111,9 +83,6 @@ class Menu:
             if keys[pygame.K_ESCAPE]:
                 self.depth = 0
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if options_back.checkForInput(menu_mouse_pos):
                         self.depth = 0
@@ -121,9 +90,3 @@ class Menu:
 
     def run(self):
         self.check_menu_option()
-
-# pygame.init()
-# pygame.display.set_caption("Menu")
-# surface = pygame.display.set_mode((screen_width, screen_height))
-# main_menu = Menu(surface)
-# main_menu.run()

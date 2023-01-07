@@ -1,6 +1,8 @@
-import pygame
-from utilities import import_folder
 from math import sin
+
+import pygame
+
+from utilities import import_folder
 
 
 class Player(pygame.sprite.Sprite):

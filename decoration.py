@@ -1,8 +1,10 @@
-from settings import vertical_tile_number, tile_size, screen_width
+from random import choice, randint
+
 import pygame
+
+from settings import vertical_tile_number, tile_size, screen_width
 from tiles import AnimatedTile, StaticTile
 from utilities import import_folder
-from random import choice, randint
 
 
 class Sky:
@@ -49,6 +51,7 @@ class Sky:
                 surface.blit(palm[0], palm[1])
             for cloud in self.clouds:
                 surface.blit(cloud[0], cloud[1])
+
 
 class Water:
     def __init__(self, top, level_width):
