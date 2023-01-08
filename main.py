@@ -13,7 +13,7 @@ from ui import UI
 class Game:
     def __init__(self):
         # game attributes
-        self.max_level = 2
+        self.max_level = 0
         self.max_health = 100
         self.curr_health = 100
         self.coins = 0
@@ -21,9 +21,9 @@ class Game:
         self.score = 0
 
         # audio
-        self.level_bg_music = pygame.mixer.Sound('audio/level_music.wav')
-        self.overworld_bg_music = pygame.mixer.Sound('audio/overworld_music.wav')
-        self.menu_music = pygame.mixer.Sound('audio/music_main_theme.ogg')
+        self.level_bg_music = pygame.mixer.Sound('audio/music_main_theme.ogg')
+        self.overworld_bg_music = pygame.mixer.Sound('audio/overworld_music.MP3')
+        self.menu_music = pygame.mixer.Sound('audio/menu_music.mp3')
         self.end_game_music = pygame.mixer.Sound('audio/win.mp3')
 
         # overworld creation
@@ -80,6 +80,7 @@ class Game:
             self.coins = 0
             self.max_level = 0
             self.enemy_kills = 0
+            self.score = 0
             self.overworld = Overworld(0, self.max_level, screen, self.create_level, self.create_menu)
             self.status = 'overworld'
             self.level_bg_music.stop()
