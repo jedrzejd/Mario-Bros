@@ -19,7 +19,7 @@ class End_Screen:
         self.display_surface.blit(options_text, options_rect)
 
         back = pygame.image.load("assets/Play Rect.png")
-        self.display_surface.blit(pygame.transform.scale(back, (290, 150)), (530, 240))
+        self.display_surface.blit(pygame.transform.scale(back, (330, 150)), (510, 240))
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:

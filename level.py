@@ -142,7 +142,14 @@ class Level:
                         sprite_group.add(sprite)
 
                     if type == 'enemies':
-                        sprite = Enemy(tile_size, x, y)
+                        if val == '0':
+                            sprite = Enemy(tile_size, x, y, 'graphics/enemy/run/0')
+                        if val == '1':
+                            sprite = Enemy(tile_size, x, y, 'graphics/enemy/run/1')
+                        if val == '2':
+                            sprite = Enemy(tile_size, x, y, 'graphics/enemy/run/2')
+                        if val == '3':
+                            sprite = Enemy(tile_size, x, y, 'graphics/enemy/run/3')
                         sprite_group.add(sprite)
 
                     if type == 'constraints':

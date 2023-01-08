@@ -42,7 +42,7 @@ class Menu:
                 button.changeColor(menu_mouse_pos)
                 button.update(self.display_surface)
 
-            menu_text = self.get_font(100).render("MAIN MENU", True, "#b68f40")
+            menu_text = self.get_font(100).render("Mario Bros", True, "#b68f40")
             menu_rect = menu_text.get_rect(center=(640, 100))
 
             self.display_surface.blit(menu_text, menu_rect)

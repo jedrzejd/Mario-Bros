@@ -18,7 +18,7 @@ class UI:
         self.coin_rect = self.coin.get_rect(topleft=self.coin_topleft)
 
         # enemy_kills
-        self.enemy_kills = pygame.image.load('graphics/enemy/run/enemy_run1.png').convert_alpha()
+        self.enemy_kills = pygame.image.load('graphics/enemy/run/0/enemy_run1.png').convert_alpha()
         self.enemy_kills_topleft = (42, 141)
         self.enemy_kills_rect = self.enemy_kills.get_rect(topleft=self.enemy_kills_topleft)
 
