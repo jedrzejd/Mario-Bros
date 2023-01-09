@@ -26,15 +26,12 @@ class Player(pygame.sprite.Sprite):
         self.speed = 8
         self.gravity = 0.8
         self.jump_speed = -16
-        self.collision_rect = pygame.Rect(self.rect.topleft, (50, self.rect.height))
+        # self.collision_rect = pygame.Rect(self.rect.topleft, (50, self.rect.height))
 
         # player status
         self.status = 'idle'
         self.facing_right = True
-        self.on_ceiling = False
         self.on_ground = False
-        self.on_left = False
-        self.on_right = False
 
         # health managment
         self.change_health = change_health
@@ -88,11 +85,11 @@ class Player(pygame.sprite.Sprite):
         image = animation[int(self.frame_index)]
         if self.facing_right:
             self.image = image
-            self.rect.bottomleft = self.collision_rect.bottomleft
+            self.rect.bottomleft = self.rect.bottomleft
         else:
             flipped_image = pygame.transform.flip(image, True, False)
             self.image = flipped_image
-            self.rect.bottomright = self.collision_rect.bottomright
+            self.rect.bottomright = self.rect.bottomright
 
         if self.invincible:
             alpha = self.wave_value()
@@ -131,7 +128,7 @@ class Player(pygame.sprite.Sprite):
 
     def apply_gravity(self):
         self.direction.y += self.gravity
-        self.collision_rect.y += self.direction.y
+        self.rect.y += self.direction.y
 
     def jump(self):
         self.direction.y = self.jump_speed

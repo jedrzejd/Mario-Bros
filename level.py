@@ -186,9 +186,12 @@ class Level:
         player_x = player.rect.centerx
         direction_x = player.direction.x
 
+        # left
         if player_x < screen_width / 4 and direction_x < 0:
             self.world_shift = 8
             player.speed = 0
+
+        # right
         elif player_x > screen_width - screen_width / 4 and direction_x > 0:
             self.world_shift = -8
             player.speed = 0
@@ -198,16 +201,16 @@ class Level:
 
     def horizontal_movement_collision(self):
         player = self.player.sprite
-        player.collision_rect.x += player.direction.x * player.speed
+        player.rect.x += player.direction.x * player.speed
         collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites() + self.fg_palm_sprites.sprites()
         for sprite in collidable_sprites:
-            if sprite.rect.colliderect(player.collision_rect):
+            if sprite.rect.colliderect(player.rect):
                 if player.direction.x < 0:
-                    player.collision_rect.left = sprite.rect.right
+                    player.rect.left = sprite.rect.right
                     player.on_left = True
                     self.current_x = player.rect.left
                 elif player.direction.x > 0:
-                    player.collision_rect.right = sprite.rect.left
+                    player.rect.right = sprite.rect.left
                     player.on_right = True
                     self.current_x = player.rect.right
 
@@ -216,13 +219,13 @@ class Level:
         player.apply_gravity()
         collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites() + self.fg_palm_sprites.sprites()
         for sprite in collidable_sprites:
-            if sprite.rect.colliderect(player.collision_rect):
+            if sprite.rect.colliderect(player.rect):
                 if player.direction.y > 0:
-                    player.collision_rect.bottom = sprite.rect.top
+                    player.rect.bottom = sprite.rect.top
                     player.direction.y = 0
                     player.on_ground = True
                 elif player.direction.y < 0:
-                    player.collision_rect.top = sprite.rect.bottom
+                    player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
                     player.on_ceiling = True
 
@@ -237,7 +240,7 @@ class Level:
     def check_death(self):
         if self.player.sprite.rect.top > screen_height:
             self.player.sprite.direction.y = -20
-            self.change_health(-30)
+            self.change_health(-50)
 
     def check_win(self):
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
