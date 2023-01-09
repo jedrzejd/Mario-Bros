@@ -1,1 +1,1 @@
-# Mario-Bros
+# Mario-Bros by Jędrzej "Yendrula" Dudzicz
